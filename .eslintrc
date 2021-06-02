@@ -1,0 +1,13 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint"],
+    "rules": {
+      "semi": ["error", "never"],
+      "quotes": [2, "single"],
+      "require-await": "error",
+      "object-curly-spacing": ["error", "always"],
+      "array-bracket-spacing": ["error", "always", { "arraysInArrays": false, "singleValue": false }],
+      "computed-property-spacing": [2, "never"],
+      "max-statements": [1, 15]
+    }
+  }

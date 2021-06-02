@@ -1,19 +1,35 @@
-import express, { Express, Request, Response } from 'express';
-import bodyParser from 'body-parser';
-import helmet from 'helmet';
-import dotenv from 'dotenv';
+import express, { Express, Request, Response } from 'express'
+import helmet from 'helmet'
+import dotenv from 'dotenv'
+import mongoose from 'mongoose'
+import Post from './schemas/Post'
+import { PRIVATE_MONGO_TOKEN, DEFAULT_PORT } from './constants/constants'
 
-dotenv.config();
+dotenv.config()
 
-const PORT = process.env.PORT || 3000;
-const app: Express = express();
+const PORT: number | string = process.env.PORT || DEFAULT_PORT
+const app: Express = express()
 
-app.use(helmet());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json())
+app.use(helmet())
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('<h1>Hello from the TypeScript world!</h1>');
-});
+app.post('/', async (req: Request, res: Response) => {
+  try {
+    const { author, title, content, picture } = req.body
+    const post = await Post.create({ author, title, content, picture })
+    res.json(post)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
 
-app.listen(PORT, () => console.log(`Running on ${PORT} ⚡`));
+async function startApp(): Promise<void> {
+  try {
+    await mongoose.connect(PRIVATE_MONGO_TOKEN, { useUnifiedTopology: true, useNewUrlParser: true })
+    app.listen(PORT, () => console.log(`Running on ${PORT} ⚡`))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+startApp()
