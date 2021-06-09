@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express'
 import helmet from 'helmet'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
-import Post from './schemas/Post'
+import router from './router'
 import { PRIVATE_MONGO_TOKEN, DEFAULT_PORT } from './constants/constants'
 
 dotenv.config()
@@ -12,16 +12,7 @@ const app: Express = express()
 
 app.use(express.json())
 app.use(helmet())
-
-app.post('/', async (req: Request, res: Response) => {
-  try {
-    const { author, title, content, picture } = req.body
-    const post = await Post.create({ author, title, content, picture })
-    res.json(post)
-  } catch (error) {
-    res.status(500).json(error)
-  }
-})
+app.use('/api', router)
 
 async function startApp(): Promise<void> {
   try {
