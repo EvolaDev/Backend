@@ -1,4 +1,4 @@
-import Router, { IRouter, Response } from 'express'
+import Router, { IRouter } from 'express'
 import PostController from './controllers/PostController'
 import Post from './schemas/Post'
 

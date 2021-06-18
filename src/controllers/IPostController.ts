@@ -3,4 +3,7 @@ export interface IPostBodyRequest extends ReadableStream<Uint8Array> {
     title: string;
     content: string;
     picture?: string;
+    files?: {
+        picture: string;
+    }
 }
