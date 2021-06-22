@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import router from './router'
 import fileUpload from 'express-fileupload'
-import formidable from 'express-formidable'
+import formidable from 'formidable'
 import { PRIVATE_MONGO_TOKEN, DEFAULT_PORT } from './constants/constants'
 
 dotenv.config()
@@ -14,9 +14,10 @@ const app: Express = express()
 
 app.use(express.json())
 app.use(helmet())
-app.use(formidable())
-app.use('/api', router)
+app.use(express.urlencoded())
 app.use(fileUpload({}))
+app.use('/api', router)
+
 
 async function startApp(): Promise<void> {
   try {

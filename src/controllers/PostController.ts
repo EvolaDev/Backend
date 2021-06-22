@@ -1,14 +1,21 @@
 import { Request, Response } from 'express'
-import { UploadedFile } from 'express-fileupload'
+import formidable, { Fields } from 'formidable'
 import PostService from '../services/PostService'
 import { IPostBodyRequest } from './IPostController'
 
 class PostController {
+    // eslint-disable-next-line require-await
     async create(req: Request, res: Response) {
         try {
-            console.log(req.body)
-            const post = await PostService.create(req.body, <UploadedFile>req.files?.picture)
-            res.json(post)
+            const form = formidable({ multiples: true })
+            form.parse(req, async (_err, fields, files) => {
+                try {
+                    const post = await PostService.create(<Fields>fields, files as unknown as File)
+                    res.json(post)
+                } catch (error) {
+                    res.status(500).json(error.message)
+                }
+            })
         } catch (error) {
             res.status(500).json(error.message)
         }

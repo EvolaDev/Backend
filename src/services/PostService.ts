@@ -1,4 +1,5 @@
 import { UploadedFile } from 'express-fileupload'
+import { Fields } from 'formidable'
 import Post from '../schemas/Post'
 import FileService from './FileService'
 
@@ -12,9 +13,9 @@ export interface Post {
 }
 
 class PostService {
-    async create(post: Post, picture: UploadedFile | undefined) {
+    async create(post: Fields, picture: File | undefined) {
+        console.log({ post, picture })
         const fileName = FileService.saveFile(picture)
-        console.log({ ...post, picture: fileName })
         const createdPost = await Post.create({ ...post, picture: fileName })
         return createdPost
     }
